@@ -322,8 +322,9 @@ def _(mo):
 
 @app.cell
 def _(df, pl):
-    (df
-     .with_columns(buy_freq=pl.col('account_name').len().over('account_name'))
+    df.with_columns(
+        buy_freq=pl.len().over("account_name"),
+        total_quant=pl.col("quantity").sum().over("account_name"),
     )
     return
 
@@ -336,12 +337,24 @@ def _(mo):
 
 @app.cell
 def _(df, pl):
-    (df
-     .with_columns(buy_freq=pl.col('account_name').len().over('account_name'))
-     .filter(pl.col('buy_freq') == pl.col('buy_freq').max())
-     .select('account_name','buy_freq')
+    (
+        df     .with_columns(buy_freq=pl.len().over("account_name"))
+     .filter(pl.col("buy_freq") == pl.col("buy_freq").max())
+     .select("account_name", "buy_freq")
      .unique()
     )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Note that you _can_ also reach this same result using a normal `group_by()`, in some cases using `group_by()` vs `over()` is a matter of preference""")
+    return
+
+
+@app.cell
+def _(df, pl):
+    df.group_by("account_name").len(name="buy_freq").filter(pl.col("buy_freq") == pl.col("buy_freq").max())
     return
 
 

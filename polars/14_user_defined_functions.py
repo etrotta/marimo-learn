@@ -54,6 +54,11 @@ def _(mo):
     )
     return
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.callout("🚀 polars also supports [Plugins](https://docs.pola.rs/user-guide/plugins/) written in Rust if you need of more flexibility than Expressions and more speed than UDFs, but they won't be covered in this notebook")
+    return
+
 
 @app.cell(hide_code=True)
 def _(mo):

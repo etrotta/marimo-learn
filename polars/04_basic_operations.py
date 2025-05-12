@@ -362,9 +362,18 @@ def _(mo):
 
 @app.cell
 def _(df, pl):
-    (df
-     .with_columns(decade=pl.col('year').floordiv(10).mul(10))
-     .filter(pl.col('category').ne('Vintage'))
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    /// attention | Comparing null values
+
+    The `eq()` method will propagate `null` values if either side of the comparison is `null`.
+
+    There are also `eq_missing()` and `ne_missing()` methods that treat `null == null` as `True` and null equals to anything else as `False`
+    ///
+    """
      )
     return
 

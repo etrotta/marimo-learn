@@ -184,7 +184,7 @@ def _(pl):
     def list_members(expr, namespace) -> list[dict]:
         """Iterates through the attributes of `expr` and returns their metadata"""
         members = []
-        for attrname in expr.__dir__():
+        for attrname in dir(expr):
             is_namespace = attrname in pl.Expr._accessors
             is_private = attrname.startswith("_")
             if is_namespace or is_private:
@@ -205,11 +205,10 @@ def _(pl):
         # Dummy expression instance to 'crawl'
         expr = pl.lit("")
         root_members = list_members(expr, "root")
-        namespaced_members: list[list[dict]] = [
-            list_members(getattr(expr, namespace), namespace)
-            for namespace in pl.Expr._accessors
-        ]
-        return sum(namespaced_members, root_members)
+        namespaced_members: list[dict] = [
+member for namespace in pl.Expr._accessors for member in list_members(getattr(expr, namespace), namespace)
+                    ]
+        return root_members + namespaced_members
 
 
     expressions_df = pl.from_dicts(list_expr_meta(), infer_schema_length=None).sort('namespace', 'member')
@@ -408,7 +407,7 @@ def _(expressions_df, pl):
         "namespace",
         "member",
         is_converter=pl.col("member").str.starts_with("to_"),
-    ).sort(-pl.col("is_converter").cast(pl.Int8))
+    ).sort(pl.col("is_converter"), descending=True)
     return
 
 
@@ -430,7 +429,7 @@ def _(expressions_df, pl):
         "namespace",
         "member",
         is_escaped_keyword=pl.col("member").str.ends_with("_"),
-    ).sort(-pl.col("is_escaped_keyword").cast(pl.Int8))
+    ).sort(pl.col("is_escaped_keyword"), descending=True)
     return
 
 
@@ -613,22 +612,16 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(alt, expressions_df, pl, random, wordcloud_height, wordcloud_width):
+def _(alt, expressions_df, pl, wordcloud_height, wordcloud_width):
     wordcloud_df = (
         expressions_df.select(pl.col("member").str.split("_"))
         .explode("member")
         .group_by("member")
-        .agg(pl.len())
+        .len()
         # Generating random x and y coordinates to distribute the words in the 2D space
         .with_columns(
-            x=pl.col("member").map_elements(
-                lambda e: random.randint(0, wordcloud_width.value),
-                return_dtype=pl.UInt8,
-            ),
-            y=pl.col("member").map_elements(
-                lambda e: random.randint(0, wordcloud_height.value),
-                return_dtype=pl.UInt8,
-            ),
+            x=pl.int_range(0, wordcloud_width.value).sample(pl.len(), with_replacement=True),
+            y=pl.int_range(0, wordcloud_height.value).sample(pl.len(), with_replacement=True),
         )
     )
 
@@ -683,7 +676,7 @@ def _(mo):
         r"""
         Now that we have constructed these bullet points through *horizontal* concatenation of strings, we can perform a *vertical* one so that we end up with a single string in which we have a bullet point on each line.
 
-        We will use the [`join`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.join.html) expression to do so.
+    We will use the [`str.join`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.str.join.html) expression to do so.
         """
     )
     return
