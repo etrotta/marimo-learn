@@ -504,7 +504,7 @@ def _(filters, mo, pl, rain, stations, weather):
 @app.cell
 def _(animation_data, pl, px):
     _fig = px.scatter_geo(
-        animation_data.with_columns(avg_precipitation=pl.col("precipitation").mean()),
+        animation_data.with_columns(avg_precipitation=pl.col("precipitation").mean().over("name")),
         lat="lat",
         lon="lon",
         hover_name="name",
