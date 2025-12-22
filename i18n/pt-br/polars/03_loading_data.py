@@ -21,13 +21,13 @@ app = marimo.App(width="medium")
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Loading Data
+    # Carregando Dados
 
-    _By [etrotta](https://github.com/etrotta)._
+    _Por [etrotta](https://github.com/etrotta)._
 
-    This tutorial covers how to load data of varying formats and from different sources using [polars](https://docs.pola.rs/).
+    Este tutorial aborda como carregar dados de vários formatos e de diferentes fontes usando [polars](https://docs.pola.rs/).
 
-    It includes examples of how to load and write to a variety of formats, shows how to convert data from other libraries to support formats not supported directly by polars, includes relevant links for users that need to connect with external sources, and explains how to deal with custom formats via plugins.
+    Ele inclui exemplos de como carregar e gravar em uma variedade de formatos, mostra como converter dados de outras bibliotecas para suportar formatos não diretamente suportados por polars, inclui links relevantes para usuários que precisam se conectar a fontes externas e explica como lidar com formatos personalizados via plugins.
     """)
     return
 
@@ -70,7 +70,7 @@ def _(mo, pl):
     mo.vstack(
         [
             mo.ui.table(df, label="Quick Reference", pagination=False),
-            "We will also use this table to demonstrate writing and reading to each format",
+            "Também usaremos esta tabela para demonstrar a escrita e leitura para cada formato",
         ]
     )
     return (df,)
@@ -80,7 +80,7 @@ def _(mo, pl):
 def _(mo):
     mo.md(r"""
     ## Parquet
-    Parquet is a popular format for storing tabular data based on the Arrow memory spec, it is a great default and you'll find a lot of datasets already using it in sites like HuggingFace
+    Parquet é um formato popular para armazenar dados tabulares baseado na especificação de memória Arrow, é um ótimo padrão e você encontrará muitos conjuntos de dados já o utilizando em sites como HuggingFace
     """)
     return
 
@@ -98,9 +98,9 @@ def _(df, folder, pl):
 def _(mo):
     mo.md(r"""
     ## CSV
-    A classic and common format that has been widely used for decades.
+    Um formato clássico e comum que tem sido amplamente utilizado por décadas.
 
-    The API is almost identical to Parquet - You can just replace `parquet` by `csv` and it will work with the default settings, but polars also allows for you to customize some settings such as the delimiter and quoting rules.
+    A API é quase idêntica à do Parquet - você pode simplesmente substituir `parquet` por `csv` e funcionará com as configurações padrão, mas o Polars também permite personalizar algumas configurações, como o delimitador e as regras de citação.
     """)
     return
 
@@ -120,17 +120,17 @@ def _(mo):
     mo.md(r"""
     ## JSON
 
-    JavaScript Object Notation is somewhat commonly used for storing unstructed data, and extremely commonly used for API responses.
+    JavaScript Object Notation é um formato de dados comumente usado para armazenar dados não estruturados, e extremamente comum para respostas de API.
 
-    For large datasets you'll frequently see a variation in which each line in the file defines one separate object, called "Newline delimited JSON" (`ndjson`) or "JSON Lines" (`jsonl`)
+    Para grandes conjuntos de dados, você frequentemente verá uma variação em que cada linha no arquivo define um objeto separado, chamado "JSON delimitado por nova linha" (`ndjson`) ou "Linhas JSON" (`jsonl`)
 
-    /// Note
+    /// Nota
 
-        It's a lot more common to find Nested data in JSON than in other formats, but other formats such as Parquet also support nested datatypes.
+        É muito mais comum encontrar dados aninhados em JSON do que em outros formatos, mas outros formatos como Parquet também suportam tipos de dados aninhados.
 
-        Polars supports Lists with variable length, Arrays with fixed length, and Structs with well defined fields, but not mappings with arbitrary keys.
+        Polars suporta Listas com comprimento variável, Arrays com comprimento fixo e Structs com campos bem definidos, mas não mapeamentos com chaves arbitrárias.
 
-        You might want to transform data by unnesting structs and exploding lists after loading from complex JSON files.
+        Você pode querer transformar os dados desaninhando structs e explodindo listas após carregar de arquivos JSON complexos.
     """)
     return
 
@@ -156,13 +156,13 @@ def _(df, folder, lz, pl):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Databases
+    ## Bancos de Dados
 
-    Polars doesn't supports any databases _directly_, but rather uses other libraries as Engines. Reading and writing to databases using polars methods does not supports Lazy execution, but you may pass an SQL Query for the database to pre-filter the data before reaches polars. See the [User Guide](https://docs.pola.rs/user-guide/io/database)  for more details.
+    O Polars não suporta nenhum banco de dados _diretamente_, mas utiliza outras bibliotecas como "Engines". A leitura e escrita em bancos de dados usando métodos do Polars não suporta execução "Lazy", mas você pode passar uma consulta SQL para o banco de dados pré-filtrar os dados antes que eles cheguem ao Polars. Consulte o [Guia do Usuário](https://docs.pola.rs/user-guide/io/database) para mais detalhes.
 
-    You can also use other libraries with [arrow support](#arrow-support) or [polars plugins](#plugin-support) to read from databases before loading into polars, some of which support lazy reading.
+    Você também pode usar outras bibliotecas com [suporte Arrow](#arrow-support) ou [plugins do Polars](#plugin-support) para ler de bancos de dados antes de carregar no Polars, alguns dos quais suportam leitura "Lazy".
 
-    Using the Arrow Database Connectivity SQLite support as an example:
+    Usando o suporte SQLite de Conectividade de Banco de Dados Arrow como exemplo:
     """)
     return
 
@@ -183,9 +183,9 @@ def _(mo):
     mo.md(r"""
     ## Excel
 
-    From a performance perspective, we recommend using other formats if possible, such as Parquet or CSV files.
+    Do ponto de vista de desempenho, recomendamos usar outros formatos, se possível, como arquivos Parquet ou CSV.
 
-    Similarly to Databases, polars doesn't supports it natively but rather uses other libraries as Engines. See the [User Guide](https://docs.pola.rs/user-guide/io/excel) if you need to use it.
+    Similarmente aos bancos de dados, o Polars não o suporta nativamente, mas utiliza outras bibliotecas como "Engines". Consulte o [Guia do Usuário](https://docs.pola.rs/user-guide/io/excel) se precisar usá-lo.
     """)
     return
 
@@ -193,11 +193,11 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Others natively supported
+    ## Outros formatos suportados nativamente
 
-    If you understood the above examples, then all other formats should feel familiar - the core API is the same for all formats, `read` and `write` for the Eager API or `scan` and `sink` for the lazy API.
+    Se você entendeu os exemplos acima, então todos os outros formatos devem parecer familiares - a API é similar para todos os formatos, `read` e `write` para a API Eager ou `scan` e `sink` para a API Lazy.
 
-    See https://docs.pola.rs/api/python/stable/reference/io.html for the full list of formats natively supported by Polars
+    Consulte https://docs.pola.rs/api/python/stable/reference/io.html para a lista completa de formatos suportados nativamente pelo Polars
     """)
     return
 
@@ -205,11 +205,11 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Arrow Support
+    ## Suporte Arrow
 
-    You can convert Arrow compatible data from other libraries such as `pandas`, `duckdb` or `pyarrow` to polars DataFrames and vice-versa, much of the time without even having to copy data.
+    Você pode converter dados compatíveis com Arrow de outras bibliotecas, como `pandas`, `duckdb` ou `pyarrow`, para DataFrames do Polars e vice-versa, muitas vezes sem precisar copiar os dados.
 
-    This allows for you to use other libraries to load data in formats not support by polars, then convert the dataframe in-memory to polars.
+    Isso permite que você use outras bibliotecas para carregar dados em formatos não suportados pelo Polars e, em seguida, converta o DataFrame em memória para o Polars.
     """)
     return
 
@@ -226,9 +226,9 @@ def _(df, folder, pd, pl):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Plugin Support
+    ## Suporte a Plugins
 
-    You can also write [IO Plugins](https://docs.pola.rs/user-guide/plugins/io_plugins/) for Polars in order to support any format you need, or use other libraries that support polars via their own plugins such as DuckDB.
+    Você também pode escrever [Plugins de I/O](https://docs.pola.rs/user-guide/plugins/io_plugins/) para o Polars a fim de suportar qualquer formato que você precise, ou usar outras bibliotecas que suportam o Polars através de seus próprios plugins, como o DuckDB.
     """)
     return
 
@@ -244,20 +244,20 @@ def _(duckdb, folder):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ### Creating your own Plugin
+    ### Criando seu próprio Plugin
 
-    The simplest form of plugins are essentially generators that yield DataFrames.
+    A forma mais simples de plugins são essencialmente geradores que produzem DataFrames.
 
-    Without parsing filters you will be missing on performance improvements, but even just this can help improve your performance in many cases as it allows for polars to optimize the query and request data in batches as opposed to always loading everything in memory.
+    Sem analisar os filtros, você perderá melhorias de desempenho, mas mesmo assim isso pode ajudar a melhorar seu desempenho em muitos casos, pois permite que o Polars otimize a consulta e solicite dados em lotes, em vez de sempre carregar tudo na memória.
 
-    Below is a example plugin which just takes the product between multiple iterables, some highlights are that:
+    Abaixo está um exemplo de plugin que apenas pega o produto entre múltiplos iteráveis, alguns destaques são:
 
-    - You must use `register_io_source` for polars to create the LazyFrame which will consume the Generator
-    - You are expected to provide a Schema before the Generator starts
-    - - For many use cases the Plugin may be able to infer it, but you could also pass it explicitly to the plugin function
-    - Ideally you should parse some of the filters and column selectors to avoid unnecessary work, but it is possible to delegate that to polars after loading the data in order to keep it simpler (at the cost of efficiency)
+    - Você deve usar `register_io_source` para o Polars criar o LazyFrame que consumirá o Gerador
+    - Espera-se que você forneça um Schema antes do Gerador iniciar
+    - - Para muitos casos de uso, o Plugin pode inferir o Schema, mas você também pode passá-lo explicitamente para a função do plugin
+    - Idealmente, você deve analisar alguns dos filtros e seletores de coluna para evitar trabalho desnecessário, mas é possível delegar isso ao Polars após carregar os dados para mantê-lo mais simples (ao custo de eficiência)
 
-    Efficiently parsing the filter expressions is out of the scope for this notebook.
+    A análise eficiente das expressões de filtro está fora do escopo deste notebook.
     """)
     return
 
@@ -334,14 +334,14 @@ def _(mo):
     mo.md(r"""
     ### DuckDB
 
-    As demonstrated above, in addition to Arrow interoperability support, [DuckDB](https://duckdb.org/) also has added support for loading query results into a polars DataFrame or LazyFrame via a polars plugin.
+    Como demonstrado acima, além do suporte de interoperabilidade Arrow, o [DuckDB](https://duckdb.org/) também adicionou suporte para carregar resultados de consulta em um DataFrame ou LazyFrame do Polars via um plugin do Polars.
 
-    You can read more about polars and duckdb integrations in
+    Você pode ler mais sobre as integrações entre Polars e DuckDB em
 
     - https://docs.pola.rs/user-guide/ecosystem/#duckdb
     - https://duckdb.org/docs/stable/guides/python/polars.html
 
-    You can learn more about DuckDB in the marimo course about it as well, including Marimo SQL related features
+    Você pode aprender mais sobre o DuckDB no curso marimo sobre ele, incluindo recursos relacionados a SQL do Marimo
     """)
     return
 
@@ -377,12 +377,11 @@ def _(duckdb_conn, duckdb_query):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Hive Partitions
+    ## Partições Hive
 
-    There is also support for [Hive](https://docs.pola.rs/user-guide/io/hive/) partitioned data, but parts of the API are still unstable (may change in future polars versions
-    ).
+    Também há suporte para dados particionados [Hive](https://docs.pola.rs/user-guide/io/hive/), mas partes da API ainda são instáveis (podem mudar em futuras versões do Polars).
 
-    Even without using partitions, many methods also support glob patterns to read multiple files in the same folder such as `scan_csv(folder / "*.csv")`
+    Mesmo sem usar partições, muitos métodos também suportam padrões glob para ler vários arquivos na mesma pasta, como `scan_csv(folder / "*.csv")`
     """)
     return
 
@@ -399,12 +398,11 @@ def _(df, folder, pl):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Reading from the Cloud
+    # Lendo da Nuvem
 
-    Polars also has support for reading public and private datasets from multiple websites
-    and cloud storage solutions.
+    O Polars também suporta a leitura de conjuntos de dados públicos e privados de vários sites e soluções de armazenamento em nuvem.
 
-    If you must (re)use the same file many times in the same machine you may want to manually download it then load from your local file system instead to avoid re-downloading though, or download and write to disk only if the file does not exists.
+    Se você precisar (re)utilizar o mesmo arquivo muitas vezes na mesma máquina, pode ser interessante fazer o download manual e carregar do seu sistema de arquivos local para evitar o download repetido, ou baixar e gravar em disco apenas se o arquivo não existir.
     """)
     return
 
@@ -412,9 +410,9 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Arbitrary web sites
+    ## Sites arbitrários
 
-    You can load files from nearly any website just by using a HTTPS URL, as long as it is not locked behind authorization.
+    Você pode carregar arquivos de quase qualquer site usando apenas uma URL HTTPS, desde que não esteja bloqueado por autorização.
     """)
     return
 
@@ -428,11 +426,11 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Hugging Face & Kaggle Datasets
+    ## Conjuntos de Dados Hugging Face e Kaggle
 
-    Look for polars inside of dropdowns such as "Use this dataset" in Hugging Face or "Code" in Kaggle, and oftentimes you'll get a snippet to load data directly into a dataframe you can use
+    Procure por "polars" dentro de menus suspensos como "Use this dataset" no Hugging Face ou "Code" no Kaggle, e muitas vezes você obterá um trecho para carregar os dados diretamente em um dataframe que você pode usar.
 
-    Read more: [Hugging Face](https://docs.pola.rs/user-guide/io/hugging-face/), [Kaggle](https://github.com/Kaggle/kagglehub/blob/main/README.md#kaggledatasetadapterpolars)
+    Leia mais: [Hugging Face](https://docs.pola.rs/user-guide/io/hugging-face/), [Kaggle](https://github.com/Kaggle/kagglehub/blob/main/README.md#kaggledatasetadapterpolars)
     """)
     return
 
@@ -446,11 +444,11 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Cloud Storage - AWS S3, Azure Blob Storage, Google Cloud Storage
+    ## Armazenamento em Nuvem - AWS S3, Azure Blob Storage, Google Cloud Storage
 
-    The API is the same for all three storage providers, check the [User Guide](https://docs.pola.rs/user-guide/io/cloud-storage/) if you need of any of them.
+    A API é a mesma para todos os três provedores de armazenamento; consulte o [Guia do Usuário](https://docs.pola.rs/user-guide/io/cloud-storage/) se precisar de algum deles.
 
-    Runnable examples are not included in this Notebook as it would require setting up authentication, but the disabled cell below shows an example using Azure.
+    Exemplos executáveis não estão incluídos neste Notebook, pois exigiriam a configuração de autenticação, mas a célula desabilitada abaixo mostra um exemplo usando o Azure.
     """)
     return
 
@@ -479,9 +477,9 @@ def _(adlfs, df, os, pl):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Multiplexing
+    # Multiplexação
 
-    You can also split a query into multiple sinks via [multiplexing](https://docs.pola.rs/user-guide/lazy/multiplexing/), to avoid reading multiple times, repeating the same operations for each sink or collecting intermediary results into memory.
+    Você também pode dividir uma consulta em vários "sinks" via [multiplexação](https://docs.pola.rs/user-guide/lazy/multiplexing/), para evitar ler várias vezes, repetir as mesmas operações para cada "sink" ou coletar resultados intermediários na memória.
     """)
     return
 
@@ -507,9 +505,9 @@ def _(folder, lz, pl):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Async Execution
+    # Execução Assíncrona
 
-    Polars also has experimental support for running lazy queries in `async` mode, letting you `await` operations inside of async functions.
+    O Polars também possui suporte experimental para executar consultas "lazy" em modo `async`, permitindo que você `await` operações dentro de funções assíncronas.
     """)
     return
 
@@ -531,12 +529,12 @@ async def _(folder, lz, pl, sinks):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Conclusion
-    As you have seen, polars makes it easy to work with a variety of formats and different data sources.
+    ## Conclusão
+    Como você viu, o Polars facilita o trabalho com uma variedade de formatos e diferentes fontes de dados.
 
-    From natively supported formats such as Parquet and CSV files, to using other libraries as an intermediary for XML or geospatial data, and plugins for newly emerging or proprietary formats, as long as your data can fit in a table then odds are you can turn it into a polars DataFrame.
+    Desde formatos nativamente suportados, como arquivos Parquet e CSV, até o uso de outras bibliotecas como intermediárias para dados XML ou geoespaciais, e plugins para formatos emergentes ou proprietários, contanto que seus dados possam caber em uma tabela, é provável que você possa transformá-los em um DataFrame do Polars.
 
-    Combined with loading directly from remote sources, including public data platforms such as Hugging Face and Kaggle as well as private data in your cloud, you can import datasets for almost anything you can imagine.
+    Combinado com o carregamento direto de fontes remotas, incluindo plataformas de dados públicas como Hugging Face e Kaggle, bem como dados privados em sua nuvem, você pode importar conjuntos de dados para quase tudo que possa imaginar.
     """)
     return
 
@@ -544,8 +542,8 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Utilities
-    Imports, utility functions and alike used through the Notebook
+    ## Utilitários
+    Importações, funções utilitárias e afins usadas ao longo do Notebook
     """)
     return
 
