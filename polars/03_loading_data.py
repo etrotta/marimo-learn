@@ -349,6 +349,7 @@ def _(mo):
 @app.cell
 def _():
     # Amazing if you need of features not yet supported by Polars such as geospatial data
+    # (Note: By the time you are reading this, https://github.com/pola-rs/geopolars may be a better alternative. It was not production-ready when this Notebook was last edited.)
     duckdb_query = """
         SELECT 
             id,

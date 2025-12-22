@@ -23,7 +23,9 @@ def _(mo):
     mo.md(r"""
     # Carregando Dados
 
-    _Por [etrotta](https://github.com/etrotta)._
+    _Original por [etrotta](https://github.com/etrotta)._
+
+    _traduzido por [etrotta](https://github.com/etrotta) e [gemini](https://github.com/google-gemini/gemini-cli)_
 
     Este tutorial aborda como carregar dados de vários formatos e de diferentes fontes usando [polars](https://docs.pola.rs/).
 
@@ -69,7 +71,7 @@ def _(mo, pl):
     )
     mo.vstack(
         [
-            mo.ui.table(df, label="Quick Reference", pagination=False),
+            mo.ui.table(df, label="Referencia rapida", pagination=False),
             "Também usaremos esta tabela para demonstrar a escrita e leitura para cada formato",
         ]
     )
@@ -100,7 +102,7 @@ def _(mo):
     ## CSV
     Um formato clássico e comum que tem sido amplamente utilizado por décadas.
 
-    A API é quase idêntica à do Parquet - você pode simplesmente substituir `parquet` por `csv` e funcionará com as configurações padrão, mas o Polars também permite personalizar algumas configurações, como o delimitador e as regras de citação.
+    A API é quase idêntica à do Parquet - você pode simplesmente substituir `parquet` por `csv` e funcionará com as configurações padrão, mas o Polars também permite personalizar algumas configurações, como o delimitador e o uso de aspas.
     """)
     return
 
@@ -122,15 +124,15 @@ def _(mo):
 
     JavaScript Object Notation é um formato de dados comumente usado para armazenar dados não estruturados, e extremamente comum para respostas de API.
 
-    Para grandes conjuntos de dados, você frequentemente verá uma variação em que cada linha no arquivo define um objeto separado, chamado "JSON delimitado por nova linha" (`ndjson`) ou "Linhas JSON" (`jsonl`)
+    Para grandes conjuntos de dados, você frequentemente verá uma variação em que cada linha no arquivo define um objeto separado, chamado "Newline delimited JSON" (`ndjson`) ou "JSON Lines" (`jsonl`)
 
-    /// Nota
+    /// Note
 
         É muito mais comum encontrar dados aninhados em JSON do que em outros formatos, mas outros formatos como Parquet também suportam tipos de dados aninhados.
 
-        Polars suporta Listas com comprimento variável, Arrays com comprimento fixo e Structs com campos bem definidos, mas não mapeamentos com chaves arbitrárias.
+        Polars suporta Listas com comprimento variável, Arrays com comprimento fixo e Structs com campos bem definidos, mas não mapas com chaves arbitrárias.
 
-        Você pode querer transformar os dados desaninhando structs e explodindo listas após carregar de arquivos JSON complexos.
+        Você pode querer transformar os dados desaninhando structs e explodindo listas após carregar de arquivos JSON complexos. (Metodos `unnest` e `explode`)
     """)
     return
 
@@ -160,9 +162,9 @@ def _(mo):
 
     O Polars não suporta nenhum banco de dados _diretamente_, mas utiliza outras bibliotecas como "Engines". A leitura e escrita em bancos de dados usando métodos do Polars não suporta execução "Lazy", mas você pode passar uma consulta SQL para o banco de dados pré-filtrar os dados antes que eles cheguem ao Polars. Consulte o [Guia do Usuário](https://docs.pola.rs/user-guide/io/database) para mais detalhes.
 
-    Você também pode usar outras bibliotecas com [suporte Arrow](#arrow-support) ou [plugins do Polars](#plugin-support) para ler de bancos de dados antes de carregar no Polars, alguns dos quais suportam leitura "Lazy".
+    Você também pode usar outras bibliotecas com [suporte Arrow](#arrow-support) ou [plugins do Polars](#plugin-support) para ler de bancos de dados antes de carregar no Polars, algumas das quais suportam leitura "Lazy".
 
-    Usando o suporte SQLite de Conectividade de Banco de Dados Arrow como exemplo:
+    Usando o suporte de SQLite via _Arrow Database Connectivity_ (ADBC) como exemplo:
     """)
     return
 
@@ -334,14 +336,14 @@ def _(mo):
     mo.md(r"""
     ### DuckDB
 
-    Como demonstrado acima, além do suporte de interoperabilidade Arrow, o [DuckDB](https://duckdb.org/) também adicionou suporte para carregar resultados de consulta em um DataFrame ou LazyFrame do Polars via um plugin do Polars.
+    Como demonstrado acima, além do suporte de interoperabilidade Arrow, o [DuckDB](https://duckdb.org/) também adicionou suporte para carregar resultados de consulta em um DataFrame ou LazyFrame do Polars via plugins.
 
     Você pode ler mais sobre as integrações entre Polars e DuckDB em
 
     - https://docs.pola.rs/user-guide/ecosystem/#duckdb
     - https://duckdb.org/docs/stable/guides/python/polars.html
 
-    Você pode aprender mais sobre o DuckDB no curso marimo sobre ele, incluindo recursos relacionados a SQL do Marimo
+    Você pode aprender mais sobre o DuckDB no curso sobre ele neste mesmo repositorio, incluindo recursos relacionados a celulas SQL do Marimo
     """)
     return
 
@@ -349,6 +351,7 @@ def _(mo):
 @app.cell
 def _():
     # Amazing if you need of features not yet supported by Polars such as geospatial data
+    # (Note: By the time you are reading this, https://github.com/pola-rs/geopolars may be a better alternative. It was not production-ready when this Notebook was last edited.)
     duckdb_query = """
         SELECT 
             id,
@@ -379,7 +382,7 @@ def _(mo):
     mo.md(r"""
     ## Partições Hive
 
-    Também há suporte para dados particionados [Hive](https://docs.pola.rs/user-guide/io/hive/), mas partes da API ainda são instáveis (podem mudar em futuras versões do Polars).
+    Também há suporte para dados particionados [Hive](https://docs.pola.rs/user-guide/io/hive/), mas partes da API ainda estão marcadas como "unstable" (instáveis - isso é, seu funcionamento pode mudar em versões futuras).
 
     Mesmo sem usar partições, muitos métodos também suportam padrões glob para ler vários arquivos na mesma pasta, como `scan_csv(folder / "*.csv")`
     """)
@@ -428,7 +431,7 @@ def _(mo):
     mo.md(r"""
     ## Conjuntos de Dados Hugging Face e Kaggle
 
-    Procure por "polars" dentro de menus suspensos como "Use this dataset" no Hugging Face ou "Code" no Kaggle, e muitas vezes você obterá um trecho para carregar os dados diretamente em um dataframe que você pode usar.
+    Procure por "polars" dentro de menus suspensos como "Use this dataset" no Hugging Face ou "Code" no Kaggle, e muitas vezes você encontrará snippets de codigo para carregar os dados diretamente em um DataFrame.
 
     Leia mais: [Hugging Face](https://docs.pola.rs/user-guide/io/hugging-face/), [Kaggle](https://github.com/Kaggle/kagglehub/blob/main/README.md#kaggledatasetadapterpolars)
     """)
@@ -477,9 +480,9 @@ def _(adlfs, df, os, pl):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Multiplexação
+    # Multiplexing
 
-    Você também pode dividir uma consulta em vários "sinks" via [multiplexação](https://docs.pola.rs/user-guide/lazy/multiplexing/), para evitar ler várias vezes, repetir as mesmas operações para cada "sink" ou coletar resultados intermediários na memória.
+    Você também pode dividir uma consulta em vários "sinks" via [multiplexing](https://docs.pola.rs/user-guide/lazy/multiplexing/), para evitar ler várias vezes, repetir as mesmas operações para cada "sink" ou coletar resultados intermediários na memória.
     """)
     return
 
@@ -507,7 +510,7 @@ def _(mo):
     mo.md(r"""
     # Execução Assíncrona
 
-    O Polars também possui suporte experimental para executar consultas "lazy" em modo `async`, permitindo que você `await` operações dentro de funções assíncronas.
+    O Polars também possui suporte experimental para executar consultas "lazy" em modo `async`, permitindo que você use `await` para executar operações dentro de funções assíncronas sem bloquear o resto da aplicação.
     """)
     return
 
@@ -530,7 +533,7 @@ async def _(folder, lz, pl, sinks):
 def _(mo):
     mo.md(r"""
     ## Conclusão
-    Como você viu, o Polars facilita o trabalho com uma variedade de formatos e diferentes fontes de dados.
+    Como você viu, o Polars facilita o trabalho com uma variedade de formatos e fontes de dados diferentes.
 
     Desde formatos nativamente suportados, como arquivos Parquet e CSV, até o uso de outras bibliotecas como intermediárias para dados XML ou geoespaciais, e plugins para formatos emergentes ou proprietários, contanto que seus dados possam caber em uma tabela, é provável que você possa transformá-los em um DataFrame do Polars.
 
